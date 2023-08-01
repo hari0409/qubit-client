@@ -9,7 +9,7 @@ const Header = () => {
   return (
     <>
       <Box bg="#ffffff" p="10px" alignItems="center">
-        <Center>
+        <Center className='prevent-select'>
           <Image src="/logo.png" width={100} height={100} alt='logo' />
           <Heading size="2xl">Qubit</Heading>
         </Center>

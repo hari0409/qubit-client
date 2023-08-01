@@ -68,8 +68,8 @@ export const DragDrop = () => {
             <input ref={inputRef} type="file" id="input-file-upload" multiple={true} onChange={handleChange} />
             <label id="label-file-upload" htmlFor="input-file-upload" className={dragActive ? "drag-active" : ""}>
                 <div>
-                    <p>Drag and drop your file here or</p>
-                    <button className="upload-button" onClick={onButtonClick}>Upload a file</button>
+                    <p style={{fontSize:"24px"}}>Drag and drop your file here or</p>
+                    <button className="upload-button" onClick={onButtonClick} style={{fontSize:"18px"}}>Upload a file</button>
                 </div>
             </label>
             <Box m="10px">
