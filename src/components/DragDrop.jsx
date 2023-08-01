@@ -1,9 +1,14 @@
+"use client";
+import { Box, Button, ButtonGroup, Spinner } from "@chakra-ui/react";
 import { useRef, useState } from "react";
 
 // drag drop file componen
 export const DragDrop = () => {
     // drag state
     const [dragActive, setDragActive] = useState(false);
+    const [done, setDone] = useState(false);
+    const [loading, setLoading] = useState(false);
+
     // ref
     const inputRef = useRef(null);
 
@@ -25,7 +30,7 @@ export const DragDrop = () => {
         setDragActive(false);
         console.log("File uploading");
         if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-            // handleFiles(e.dataTransfer.files);
+            handleFiles(e.dataTransfer.files);
         }
     };
 
@@ -34,14 +39,29 @@ export const DragDrop = () => {
         e.preventDefault();
         console.log("File uploading");
         if (e.target.files && e.target.files[0]) {
-            // handleFiles(e.target.files);
+            handleFiles(e.target.files);
         }
     };
+
+    const handleFiles = (data) => {
+        setLoading(true)
+        setTimeout(() => {
+            console.log("Processing");
+            setLoading(false);
+            setDone(true);
+        }, 2000);
+    }
 
     // triggers the input when the button is clicked
     const onButtonClick = () => {
         inputRef.current.click();
     };
+
+    const handleTryAgain = () => {
+        setDragActive(false);
+        setDone(false);
+        setLoading(false);
+    }
 
     return (
         <form id="form-file-upload" onDragEnter={handleDrag} onSubmit={(e) => e.preventDefault()}>
@@ -52,6 +72,18 @@ export const DragDrop = () => {
                     <button className="upload-button" onClick={onButtonClick}>Upload a file</button>
                 </div>
             </label>
+            <Box m="10px">
+                {
+                    done ? <>
+                        <ButtonGroup>
+                            <Button >Download Obfuscated file</Button>
+                            <Button onClick={handleTryAgain}>Try another file</Button>
+                        </ButtonGroup>
+                    </> : loading ? <>
+                        <Spinner size="lg" color="blue"/>
+                    </> : null
+                }
+            </Box>
             {dragActive && <div id="drag-file-element" onDragEnter={handleDrag} onDragLeave={handleDrag} onDragOver={handleDrag} onDrop={handleDrop}></div>}
         </form>
     );
