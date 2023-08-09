@@ -5,7 +5,7 @@ import React from 'react'
 const NavButton = ({ href, feature }) => {
     return (
         <Link href={`/${href}`} style={{ textDecoration: "none" }} >
-            <Button colorScheme='purple'>
+            <Button colorScheme='green'>
                 {feature}
             </Button>
         </Link>

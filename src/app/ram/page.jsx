@@ -31,7 +31,7 @@ const Ram = () => {
   return (
     <>
       <Box m="10px">
-        <Heading size="lg">Obfuscator</Heading>
+        <Heading size="lg">Ram Dump Analysis</Heading>
         <form>
           <FormControl id="filePath" isRequired>
             <FormLabel>File Path</FormLabel>
@@ -46,7 +46,7 @@ const Ram = () => {
           </Button>
         </form>
       </Box>
-      
+
       <Container maxW="xl" centerContent p={8}>
         <Box boxShadow="md" p={4} rounded="lg" bg="white" width="100%" maxWidth="600px">
           <Text fontSize="lg" fontWeight="bold" mb={4}>
