@@ -1,32 +1,45 @@
 "use client";
 
-import { Box, Button, Flex, FormControl, FormLabel, HStack, Heading, Input, Select, Text } from '@chakra-ui/react'
+import { Box, Button, Center, Flex, FormControl, FormLabel, HStack, Heading, Input, Select, Spinner, Text } from '@chakra-ui/react'
 import axios from 'axios';
 import React, { useState } from 'react'
 
 const Obfuscator = () => {
-  const [selectedOption, setSelectedOption] = useState('');
-  const [inputValue, setInputValue] = useState('');
+  const [selectedOption, setSelectedOption] = useState('image');
+  const [imgVal, setImgVal] = useState("")
+  const [textVal, setTextVal] = useState("")
+  const [loading, setLoading] = useState(false)
+  const [ans, setAns] = useState("")
 
   const handleOptionChange = (event) => {
     setSelectedOption(event.target.value);
   };
 
-  const handleInputChange = (event) => {
-    setInputValue(event.target.value);
-  };
-
   const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log('Selected Option:', selectedOption);
-    console.log('Input Value:', inputValue);
-    const body = {
-      type: selectedOption,
-      path: inputValue
+    setLoading(true)
+    if (selectedOption == "image") {
+      const body = {
+        imgPath: imgVal,
+      }
+      await axios.post("http://localhost:5000/api/obfuscator/uploadimg", body).then((res) => {
+        console.log(res.data);
+        setLoading(false)
+        setAns(res.data.path)
+      }).catch(err => {
+        alert(err)
+        setLoading(false)
+      })
     }
-    await axios.post("http://localhost:5000/api/obfuscator/upload", body).then((res) => {
-      console.log(res.data);
-    })
+    else {
+      const body = {
+        imgPath: imgVal,
+        textPath: textVal
+      }
+      await axios.post("http://localhost:5000/api/obfuscator/uploadtext", body).then((res) => {
+        console.log(res.data);
+      })
+    }
   };
   return (
     <>
@@ -37,28 +50,49 @@ const Obfuscator = () => {
         <HStack>
           <form onSubmit={handleSubmit}>
             <FormControl mb={4}>
-              <FormLabel>Dropdown</FormLabel>
+              <FormLabel>File Type</FormLabel>
               <Select
-                placeholder="Select an option"
                 value={selectedOption}
                 onChange={handleOptionChange}
               >
                 <option value="image">Image</option>
-                <option value="code">Code</option>
+                <option value="text">Text</option>
               </Select>
             </FormControl>
             <FormControl mb={4}>
-              <FormLabel>Input Field</FormLabel>
+              <FormLabel>Image Input</FormLabel>
               <Input
                 type="text"
                 placeholder="Enter file path"
-                value={inputValue}
-                onChange={handleInputChange}
+                value={imgVal}
+                onChange={(e) => { setImgVal(e.target.value) }}
               />
+              {
+                selectedOption == "text" ? <>
+                  <FormLabel>Text Input</FormLabel>
+                  <Input
+                    type="text"
+                    placeholder="Enter file path"
+                    value={textVal}
+                    onChange={(e) => { setTextVal(e.target.value) }}
+                  />
+                </> : null
+              }
             </FormControl>
-            <Button colorScheme="blue" type="submit">
-              Submit
-            </Button>
+            {
+              loading ? <>
+                <Center>
+                  <Spinner color='blue' />
+                </Center>
+              </> :
+                ans ? <>
+                  <Text>The encrypted data stored in <b>{ans}</b></Text>
+                </> : <>
+                  <Button colorScheme="blue" type="submit">
+                    Submit
+                  </Button>
+                </>
+            }
           </form>
         </HStack>
       </Flex>

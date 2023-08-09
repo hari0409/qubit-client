@@ -18,6 +18,7 @@ const Header = () => {
             <NavButton href="obfuscator" feature="Obfuscator" />
             <NavButton href="network" feature="Network Analysis" />
             <NavButton href="ram" feature="RAM Dump Analysis" />
+            <NavButton href="mvt" feature="MVT Analysis" />
           </ButtonGroup>
         </Flex>
       </Box>
