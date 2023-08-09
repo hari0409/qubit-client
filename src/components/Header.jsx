@@ -19,6 +19,7 @@ const Header = () => {
             <NavButton href="network" feature="Network Analysis" />
             <NavButton href="ram" feature="RAM Dump Analysis" />
             <NavButton href="mvt" feature="MVT Analysis" />
+            <NavButton href="procmon" feature="Process Monitor" />
           </ButtonGroup>
         </Flex>
       </Box>

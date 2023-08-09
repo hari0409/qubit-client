@@ -2,22 +2,34 @@
 
 import StatContainer from '@/components/minors/StatContainer';
 import { Box, Center, Container, Flex, Heading } from '@chakra-ui/react'
+import axios from 'axios';
 import { CategoryScale, Chart, registerables } from 'chart.js';
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Line } from 'react-chartjs-2';
 
 const Network = () => {
   Chart.register(...registerables);
 
-  const data = {
-    labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-    datasets: [{
-      label: '# of Votes',
-      data: [12, 19, 3, 5, 2, 3],
-      borderWidth: 1
-    }]
+  const [alarms, setAlarms] = useState(0);
+  const [lines, setLines] = useState(0)
 
+  const getInfo = async () => {
+    await axios.get("http://localhost:5000/api/sec/alarms").then((res) => {
+      console.log(res);
+      if (res.data.status == "success") {
+        console.log(res.data);
+        setAlarms(res.data.data.fileCount);
+        setLines(res.data.data.rowCount)
+      }
+    }).catch((err) => {
+      console.log(err.message);
+    })
   }
+
+  useEffect(async () => {
+    await getInfo()
+  }, [])
+
 
   return (
     <>
@@ -30,11 +42,11 @@ const Network = () => {
         </Center>
       </Container>
       <Flex justifyContent="center" gap="20px">
-        <StatContainer field="Alarms" value="10" color="#EA1179"/>
-        <StatContainer field="Packets Sniffed" value="23234" color="#91C8E4"/>
-        <StatContainer field="Database in Use" value="KDD99" color="#AED8CC"/>
+        <StatContainer field="Alarms" value={alarms} color="#EA1179" />
+        <StatContainer field="Packets Sniffed" value={lines} color="#91C8E4" />
+        <StatContainer field="Database in Use" value="KDD99" color="#AED8CC" />
       </Flex>
-      <Flex justifyContent="space-around" m="30px">
+      {/* <Flex justifyContent="space-around" m="30px">
         <Box width="1000px">
           Memory Usage Graph
           <Line data={data} />
@@ -43,7 +55,7 @@ const Network = () => {
           Alarm Graph
           <Line data={data} />
         </Box>
-      </Flex>
+      </Flex> */}
     </>
   )
 }

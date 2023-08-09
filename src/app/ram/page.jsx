@@ -1,4 +1,5 @@
 "use client";
+import Data from '@/components/minors/Data';
 import { Box, Button, Container, FormControl, FormLabel, Heading, Input, Text } from '@chakra-ui/react'
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
@@ -14,8 +15,8 @@ const Ram = () => {
       filePath
     }
     await axios.post("http://localhost:5000/api/mem/mem", body).then(async (res) => {
-      if (res.status == "success") {
-        fetch("/home/hari/Downloads/vol_analysis.txt").then((r) => { r.text().then(d => console.log(d)) })
+      if (res.data.status == "success") {
+        setTextData(res.data.msg)
       }
     }).catch((err) => {
       console.log(err);
@@ -47,15 +48,15 @@ const Ram = () => {
         </form>
       </Box>
 
-      <Container maxW="xl" centerContent p={8}>
+      <Container w="3xl" centerContent p={8}>
         <Box boxShadow="md" p={4} rounded="lg" bg="white" width="100%" maxWidth="600px">
           <Text fontSize="lg" fontWeight="bold" mb={4}>
             Text File Contents
           </Text>
           <Text whiteSpace="pre-wrap">{textData}</Text>
+          <Data data={textData} />
         </Box>
       </Container>
-
     </>
   )
 }
